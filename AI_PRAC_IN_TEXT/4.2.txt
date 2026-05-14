@@ -1,0 +1,80 @@
+4.2
+# Graph Coloring using Backtracking (User Input)
+
+# Taking colors input
+colors = input("Enter colors separated by space: ").split()
+
+# Number of vertices
+n = int(input("Enter number of vertices: "))
+
+# Graph dictionary
+neighbours = {}
+
+# Taking graph input
+for i in range(n):
+
+    vertex = input("\nEnter vertex name: ")
+
+    adjacent = input(f"Enter adjacent vertices of {vertex} separated by space: ").split()
+
+    neighbours[vertex] = adjacent
+
+# List of vertices
+states = list(neighbours.keys())
+
+# Dictionary to store assigned colors
+colors_of_states = {}
+
+# Function to check valid color assignment
+def promising(state, color):
+
+    for neighbour in neighbours[state]:
+
+        if colors_of_states.get(neighbour) == color:
+            return False
+
+    return True
+
+
+# Backtracking Function
+def colourgraph(index):
+
+    # All vertices colored
+    if index == len(states):
+        return True
+
+    state = states[index]
+
+    # Try all colors
+    for color in colors:
+
+        if promising(state, color):
+
+            colors_of_states[state] = color
+
+            # Recursive call
+            if colourgraph(index + 1):
+                return True
+
+            # Backtracking
+            del colors_of_states[state]
+
+    return False
+
+
+# Printing Given Graph
+print("\nGiven Graph:")
+
+for state in neighbours:
+    print(state, "->", neighbours[state])
+
+# Calling Graph Coloring Function
+if colourgraph(0):
+
+    print("\nColor Assignment:")
+
+    for state in states:
+        print(state, ":", colors_of_states[state])
+
+else:
+    print("No solution found")

@@ -1,0 +1,96 @@
+2
+import heapq
+
+# A* Search Algorithm
+def a_star(graph, start, goal, heuristic):
+
+    # Priority Queue
+    open_list = []
+    heapq.heappush(open_list, (0, start))
+
+    # Cost from start node
+    g_cost = {node: float('inf') for node in graph}
+    g_cost[start] = 0
+
+    # To store shortest path
+    parent = {}
+
+    while open_list:
+
+        # Node with lowest f(n)
+        current_f, current_node = heapq.heappop(open_list)
+
+        # Goal reached
+        if current_node == goal:
+
+            path = []
+
+            while current_node in parent:
+                path.append(current_node)
+                current_node = parent[current_node]
+
+            path.append(start)
+            path.reverse()
+
+            return path, g_cost[goal]
+
+        # Explore neighbors
+        for neighbor, cost in graph[current_node].items():
+
+            tentative_g_cost = g_cost[current_node] + cost
+
+            if tentative_g_cost < g_cost[neighbor]:
+
+                parent[neighbor] = current_node
+                g_cost[neighbor] = tentative_g_cost
+
+                f_cost = tentative_g_cost + heuristic[neighbor]
+
+                heapq.heappush(open_list, (f_cost, neighbor))
+
+    return None, float('inf')
+
+
+# Given Graph
+graph = {
+    'A': {'B': 1, 'C': 3},
+    'B': {'D': 1, 'E': 4},
+    'C': {'F': 2},
+    'D': {'G': 2},
+    'E': {'G': 1},
+    'F': {'G': 5},
+    'G': {}
+}
+
+# Heuristic Values
+heuristic = {
+    'A': 6,
+    'B': 4,
+    'C': 4,
+    'D': 2,
+    'E': 1,
+    'F': 3,
+    'G': 0
+}
+
+# Printing Graph
+print("Given Graph:")
+for node in graph:
+    print(node, "->", graph[node])
+
+# Start and Goal Node
+start = 'A'
+goal = 'G'
+
+# Calling A* Algorithm
+path, cost = a_star(graph, start, goal, heuristic)
+
+# Output
+print("\nStart Node:", start)
+print("Goal Node:", goal)
+
+if path:
+    print("\nShortest Path:", " -> ".join(path))
+    print("Total Cost:", cost)
+else:
+    print("No path found")
