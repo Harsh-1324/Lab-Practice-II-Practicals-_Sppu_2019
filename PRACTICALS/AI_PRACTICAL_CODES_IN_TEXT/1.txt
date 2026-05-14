@@ -1,0 +1,62 @@
+1__bfs_dfs_recursive
+from collections import deque
+
+# Given Undirected Graph using adjacency list
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}
+
+# Printing the given graph
+print("Given Graph:")
+for node in graph:
+    print(node, "->", graph[node])
+
+
+# ---------------- Breadth First Search (BFS - Recursive) ----------------
+visited_bfs = set()
+
+def bfs_recursive(queue):
+    if not queue:
+        return
+
+    node = queue.popleft()
+    print(node, end=" ")
+
+    for neighbor in graph[node]:
+        if neighbor not in visited_bfs:
+            visited_bfs.add(neighbor)
+            queue.append(neighbor)
+
+    bfs_recursive(queue)
+
+def bfs(start):
+    queue = deque([start])
+    visited_bfs.add(start)
+    bfs_recursive(queue)
+
+# Driver Code for BFS
+print("\nBreadth First Search (BFS):")
+bfs('A')
+
+
+# ---------------- Depth First Search (DFS - Recursive) ----------------
+visited_dfs = set()
+
+def dfs(node):
+    if node not in visited_dfs:
+        print(node, end=" ")
+        visited_dfs.add(node)
+
+        for neighbor in graph[node]:
+            dfs(neighbor)
+
+# Driver Code for DFS
+print("\n")
+
+print("Depth First Search (DFS):")
+dfs('A')
