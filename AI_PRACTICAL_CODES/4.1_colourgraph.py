@@ -1,0 +1,70 @@
+# Adjacency List of Graph
+neighbours = {
+    "A": ["B", "C", "D"],
+    "B": ["A", "D"],
+    "C": ["A", "D"],
+    "D": ["A", "B", "C"]
+}
+
+# Graph Nodes
+states = ["A", "B", "C", "D"]
+
+# Colors Available
+colors = ["Red", "Blue", "Green"]
+
+# Dictionary to store colors of states
+colors_of_states = {}
+
+# Function to check whether color assignment is valid
+def promising(state, color):
+
+    for neighbour in neighbours[state]:
+
+        if colors_of_states.get(neighbour) == color:
+            return False
+
+    return True
+
+
+# Backtracking Function
+def graph_coloring(index):
+
+    # All states colored
+    if index == len(states):
+        return True
+
+    state = states[index]
+
+    # Try all colors
+    for color in colors:
+
+        if promising(state, color):
+
+            colors_of_states[state] = color
+
+            # Recursive call
+            if graph_coloring(index + 1):
+                return True
+
+            # Backtrack
+            del colors_of_states[state]
+
+    return False
+
+
+# Driver Code
+print("Given Graph:")
+
+for state in neighbours:
+    print(state, "->", neighbours[state])
+
+# Calling Backtracking Function
+if graph_coloring(0):
+
+    print("\nColor Assignment:")
+
+    for state in colors_of_states:
+        print(state, ":", colors_of_states[state])
+
+else:
+    print("No solution found")
